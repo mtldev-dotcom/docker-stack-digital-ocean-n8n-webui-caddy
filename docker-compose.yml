@@ -1,0 +1,63 @@
+version: '3.9'
+
+services:
+  caddy:
+    image: caddy:latest
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - web
+
+  n8n:
+    image: n8nio/n8n
+    restart: always
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=strongpassword
+      - N8N_HOST=n8n.example.com
+      - N8N_PORT=5678
+    networks:
+      - web
+
+  webui:
+    image: ghcr.io/open-webui/open-webui:main
+    restart: always
+    environment:
+      - OLLAMA_API_BASE_URL=http://ollama:11434
+    networks:
+      - web
+
+  ollama:
+    image: ollama/ollama
+    restart: always
+    ports:
+      - "11434:11434"
+    networks:
+      - web
+
+  portainer:
+    image: portainer/portainer-ce
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - web
+
+volumes:
+  caddy_data:
+  caddy_config:
+  portainer_data:
+
+networks:
+  web:
+    driver: bridge

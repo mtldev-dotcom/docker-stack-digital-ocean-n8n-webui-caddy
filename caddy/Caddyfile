@@ -1,0 +1,11 @@
+n8n.example.com {
+    reverse_proxy n8n:5678
+}
+
+webui.example.com {
+    reverse_proxy webui:3000
+}
+
+portainer.example.com {
+    reverse_proxy portainer:9000
+}
