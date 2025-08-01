@@ -3,7 +3,7 @@ n8n.nickybruno.com {
 }
 
 webui.nickybruno.com {
-    reverse_proxy webui:3000
+    reverse_proxy webui:8080
 }
 
 portainer.nickybruno.com {
